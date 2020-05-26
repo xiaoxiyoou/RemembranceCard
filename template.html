@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/template.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>追思卡模板</title>
+</head>
+
+<body>
+    <div class="top c-row a-c j-b">
+        <div class="text">每个模版均有配套音乐，您也可自定义音乐</div>
+        <label for="file" class="label btn c-row a-c j-c">
+            <div id="change" class="btn c-row j-c a-c">上传音乐</div>
+        </label>
+    </div>
+    <form>
+        <input id="file" type="file" multiple>
+    </form>
+    <div class="bar"></div>
+    <div class="template c-row f-w">
+    </div>
+    <div class="btm c-row">
+        <div class="preview c-row j-c a-c">预览模板</div>
+        <div class="confirm c-row j-c a-c">确认模板</div>
+    </div>
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/http.js"></script>
+<script src="js/upload.js"></script>
+
+<script>
+    var carid = getUrlParam("carid");
+    var tempid = ''
+    var musicurl = ''
+    $(function () {
+        // template()
+        upsetDetail(carid)
+        // 切换模板
+        $('.template').on('click', '.template-wrapper', function () {
+            $(".tip").removeClass("tipHover");
+            $(this).find(".tip").addClass("tipHover");
+            tempid = $(this).attr("data-tempid");
+
+            sessionStorage.setItem('tempid', tempid)
+            sessionStorage.setItem('musicurl', musicurl)
+        });
+        // 预览模板
+        $('.preview').click(function () {
+            window.location.href = './showmid.html?carid=' + carid + '!' + tempid
+
+
+        })
+        // 选择模板
+        $('.confirm').click(function () {
+            // 没有音乐匹配模板音乐
+            if (!musicurl) {
+                musicurl = $(this).attr("data-musicurl");
+            }
+            select(carid, tempid, musicurl)
+        })
+    });
+    window.onload = function () {
+        $('body').css('display', 'block')
+    };
+    // 选择模板
+    function select(carid, tempid, musicurl) {
+        var data = {
+            carid: carid,
+            tempid: tempid,
+            musicurl: musicurl
+        }
+        console.log(data)
+        httpRequest("Action/recallapi?action=uptemplate", "post", data).then(function (res) {
+            console.log('选择模板', res);
+            if (res.code == 0) {
+                window.location.replace("http://wx.fuyulove.com/Recall/setting.html?carid=" + carid)
+                // window.history.back();
+            }
+            layer.msg(res.msg);
+        });
+    }
+    // 选择音乐
+    function selectmMusicurl(carid, tempid, musicurl) {
+        var data = {
+            carid: carid,
+            tempid: tempid,
+            musicurl: musicurl
+        }
+        console.log(data)
+        httpRequest("Action/recallapi?action=uptemplate", "post", data).then(function (res) {
+            console.log('选择模板', res);
+            if (res.code == 0) {
+                layer.msg('上传成功');
+            } else {
+                layer.msg(res.msg);
+            }
+        });
+    }
+    // 获取模板
+    function template(tempid) {
+        httpRequest("/Action/recallapi?action=templist", "get").then(function (res) {
+            console.log('获取模板', res);
+            if (res.code == 0) {
+                var data = res.data.list
+                var html = ''
+                for (var i = 0; i < data.length; i++) {
+                    // 找到选中的模板id
+                    if (tempid == data[i].id) {
+
+                        html += ' <div class="template-wrapper" data-tempid = ' + data[i].id +
+                            ' data-musicurl = ' +
+                            data[i].musicurl + '>'
+                        html += ' <div class="tip tipHover"></div>'
+                        html += '<div class="item">'
+                        html += '<img class="banner" src="' + data[i].imgurl + '" alt="">'
+                        html += ' <div class="text">' + data[i].title + '</div>'
+                        html += '</div>'
+                        html += ' </div>'
+
+                    } else {
+                        html += ' <div class="template-wrapper" data-tempid = ' + data[i].id +
+                            ' data-musicurl = ' +
+                            data[i].musicurl + '>'
+                        html += ' <div class="tip"></div>'
+                        html += '<div class="item">'
+                        html += '<img class="banner" src="' + data[i].imgurl + '" alt="">'
+                        html += ' <div class="text">' + data[i].title + '</div>'
+                        html += '</div>'
+                        html += ' </div>'
+
+                    }
+                }
+                $('.template').append(html)
+            }
+        });
+    }
+
+    // 设置信息
+    function upsetDetail(carid) {
+        var data = {
+            carid: carid,
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=info", "get", data).then(function (res) {
+            console.log('设置详情', res);
+            if (res.code == 0) {
+                var tempidNum = parseInt(res.data.info.tempid) - 1
+                tempid = res.data.info.tempid
+                musicurl = res.data.info.musicurl
+                template(tempid)
+
+            }
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,40 @@
+.list{
+    padding-bottom: 2rem;
+
+}
+.list-wrapper{
+    margin-bottom: .17rem;
+    background-color: #ffffff;
+}
+.banner{
+    width: 100%;
+    height: 4.2rem;
+}
+.name{
+    font-size: .35rem;
+    color: #2d2d2d;
+    
+    margin-left: .27rem;
+}
+.dueTime{
+    color: #8a898a;
+    font-size: .22rem;
+    margin-top: .27rem;
+    margin-left: .27rem;
+}
+.content{
+    background-color: #ffffff;
+    padding: .26rem;
+    padding-bottom: 2rem;
+}
+.content>img{
+    width: 6.98rem;
+    height: 4.2rem;
+
+}
+.content>.text{
+   margin-top: .35rem;
+   color: #8a898a;
+   font-size: .28rem;
+
+}

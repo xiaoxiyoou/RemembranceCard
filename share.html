@@ -1,0 +1,164 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/share.css" />
+    <link rel="stylesheet" href="css/layui.css" />
+    <title>发送邀请</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="tablexqys">
+            <!-- 第一版底部 -->
+            <div class="itemFirst-wrapper">
+                <div class="itemFirst c-row j-b a-c">
+                    <div class="c-col textCon">
+
+                    </div>
+                    <div class="c-col">
+                        <div class="img-con c-row j-c a-c">
+                            <img class="img" id="qrCode" src="img/sharePage/message.png">
+                        </div>
+                        <div class="tip" style="color: #000000;font-size: .17rem;">长按识别二维码</div>
+                    </div>
+                </div>
+            </div>
+
+
+            <img class="swiper-img" src="img/sharePage/banner1.png" alt="">
+
+        </div>
+    </div>
+    <div class="c-col j-b">
+        <img id="predictImg" src="" alt="">
+        <div class="btm-share">长按保存图片，或者将图片发给朋友</div>
+        <div class="btm-con">
+            <div class="btm-hover-con c-row a-c">
+                <div class="btm-img-con c-col j-c a-c img-hover">
+                    <img class="btm-img" src="img/sharePage/banner11.png">
+                </div>
+                <div class="btm-img-con  c-col j-c a-c">
+                    <img class="btm-img" src="img/sharePage/banner21.png">
+                </div>
+                <div class="btm-img-con  c-col j-c a-c">
+                    <img class="btm-img" src="img/sharePage/banner31.png">
+                </div>
+
+                <div class="bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.8.2.js"></script>
+    <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script src="js/shareComment.js"></script>
+    <script src="js/html2canvas.js"></script>
+    <script src="js/jquery.cookie.js"></script>
+    <script src="js/login.js"></script>
+    <script src="js/noScaling.js"></script>
+    <script src="js/layer.js"></script>
+    <script src="js/http.js"></script>
+
+    <script>
+        var indexNum = ''
+        $(function () {
+            var carid = getUrlParam("carid");
+            upsetDetail(carid)
+
+
+
+            var flag = false
+            var ShopName
+            var imgCon = [
+
+                "img/sharePage/banner1.jpg",
+                "img/sharePage/banner2.jpg",
+                "img/sharePage/banner3.jpg",
+
+            ]
+            // 点击选择模板
+            $('.btm-img-con').click(function () {
+                var index = $(this).index();
+                console.log(index)
+                $(".swiper-img").attr("src", imgCon[index]);
+                $(".btm-img-con ").removeClass("img-hover");
+                $(this).addClass("img-hover");
+                // $(".img").attr("src", 'http://wx.fuyulove.com/Action/recallapi?action=shareimg&carid=' + carid);
+                indexNum = layer.msg('加载中...', {
+                    time: 10000
+                });
+
+                createImg()
+
+
+
+            })
+
+            WeiXinShare('追思卡', 'http://wx.fuyulove.com/Recall/middlePage.html?carid='+carid, "img/index/share.png", "");
+
+
+
+
+        })
+
+        function upsetDetail(carid) {
+            var data = {
+                carid: carid,
+            }
+            console.log("data", data)
+            httpRequest("/Action/recallapi?action=info", "get", data).then(function (res) {
+                console.log('设置详情', res);
+                var Img = 'http://wx.fuyulove.com/Action/recallapi?action=shareimg&carid=' + carid
+                $("#qrCode").attr("src", Img);
+              
+
+
+
+            });
+        }
+
+        function createImg() {
+            var canvas2 = document.createElement("canvas");
+            var canvas = document.querySelector('#predictImg');
+            var w = parseInt(window.getComputedStyle(canvas).width);
+            var h = parseInt(window.getComputedStyle(canvas).height);
+            const scaleBy = 2;
+            canvas2.width = w * 1;
+            canvas2.height = h * 1;
+            canvas2.style.width = w + "px";
+            canvas2.style.height = h + "px";
+            var context = canvas2.getContext("2d");
+            context.scale(1, 1);
+            html2canvas(document.querySelector('.tablexqys'), {
+
+                width: $('.tablexqys').width(),
+                height: $('.tablexqys').height()
+
+            }).then(function (canvas2) {
+                $(".swiper-img").attr("src", "")
+                var dataURL = canvas2.toDataURL("image/png");
+                $("#predictImg").attr("src", dataURL);
+                layer.close(indexNum)
+
+            });
+        }
+
+
+        window.onload = function () {
+            createImg();
+        };
+    </script>
+</body>
+
+
+</html>

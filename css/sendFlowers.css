@@ -1,0 +1,151 @@
+html {
+    background-color: #ffffff;
+}
+
+.flower-wrapper {
+    padding: .26rem .14rem;
+}
+
+.flower-wrapper>.item {
+    height: 2.82rem;
+    width: 2.14rem;
+    border-radius: .1rem;
+    border: 1px solid #f5f5f5;
+    margin-left: .2rem;
+    margin-top: .26rem;
+    box-shadow: 1px 1px 5px #999999;
+    position: relative;
+}
+
+.flower-wrapper>.item>img {
+    height: 1.31rem;
+    width: auto;
+}
+
+.flower-wrapper>.item>.text {
+    color: #909090;
+    font-size: .28rem;
+    margin-top: .1rem;
+}
+
+
+.flower-wrapper>.item>.select-hover {
+    position: absolute;
+    right: .08rem;
+    top: .08rem;
+    width: .35rem;
+    height: .35rem;
+    background: url(./../img/flower/select.png);
+    background-size: 100% 100%;
+}
+
+.btmCon {
+    position: fixed;
+    width: 100%;
+    height: .86rem;
+    bottom: 0;
+    border-top: 1px solid #f2f2f2;
+    font-size: .33rem;
+}
+
+.btmCon>.item {
+    width: 50%;
+    height: 100%;
+    color: #6a6198;
+    background-color: #ffffff;
+
+}
+
+.btmCon>.confirm {
+    width: 50%;
+    background-color: #6a6198;
+    color: #ffffff;
+}
+
+.btmCon>.item>.text {}
+
+.btmCon>.item>.num {
+    margin-left: .4rem;
+
+}
+
+.btmCon>.item>.add {
+    width: .31rem;
+    height: .31rem;
+    margin-left: .4rem;
+
+}
+.comment-wrapper{
+    display: none;
+
+}
+.comment-con {
+    position: fixed;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 6.48rem;
+    background-color: #ffffff;
+    border-radius: .2rem;
+   padding-bottom: .38rem;
+}
+.comment-con >.title{
+    height: .84rem;
+    color: #ffffff;
+    background-color: #6a6198;
+    width: 100%;
+    line-height: .84rem;
+    text-align: center;
+    border-top-left-radius: .2rem;
+    border-top-right-radius: .2rem;
+}
+textarea{
+    width: 6.12rem;
+    height: 2.48rem;
+    background-color: #f5f5f5;
+    padding: .2rem;
+    font-size: .32rem;
+    font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+    margin-top: .2rem;
+}
+.operate{
+    width: 6.12rem;
+    padding-bottom: .2rem;
+    margin-top: .3rem;
+}
+.switch {
+    color:#6a6198;
+    border-bottom: 1px solid #6a6198;
+    padding-bottom: .1rem;
+}
+.leaveMsg {
+    color:#6a6198;
+    border: 1px solid #6a6198;
+    border-radius: .1rem;
+    padding: .1rem;
+}
+.comment-con>.btn{
+    width: 6rem;
+    height: .91rem;
+    color: #ffffff;
+    background-color: #6a6198;
+    border-radius: .1rem;
+    text-align: center;
+    line-height: .91rem;
+    margin-top: .15rem;
+
+}
+.mask{
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    opacity: 0.3;
+}
+.flowerNum{
+    color: #6a6198;
+}

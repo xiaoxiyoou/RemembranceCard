@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>追思卡</title>
+</head>
+
+<body>
+    <div class="wrapper ">
+
+    </div>
+    <img class="banner" src="img/created.png" alt="">
+
+    <div class="btmCon c-row j-c a-c">
+        <div class="btm c-row j-c a-c">创建追思卡</div>
+    </div>
+
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/http.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script src="js/login.js?rem=sdfsdf"></script>
+
+<script>
+    var shopid = getUrlParam("shopid");
+    $(function () {
+        info()
+        // 创建追思卡
+        $('.btmCon').click(function () {
+            window.location.href = './created.html?shopid=' + shopid
+        })
+        // 预览追思卡
+        $('.wrapper ').on('click', '.preview', function () {
+            var carid = $(this).attr("data-carid");
+            window.location.href = './middlePage.html?carid=' + carid
+
+        });
+
+    });
+
+
+    // 追思卡列表
+    function info() {
+        var data = {
+
+        }
+        // console.log('data', data)
+        httpRequest("Action/recallapi?action=list", "get", data).then(function (res) {
+            console.log('获取列表', res);
+            var list = res.data.list
+            console.log('list', list)
+            if (res.code == 0) {
+                if (res.data.list.length) {
+
+                    var html = ''
+                    for (var i = 0; i < list.length; i++) {
+                        if (parseInt(list[i].cardtype) == 2) {
+
+                            html += '<div class="itemWrapper c-row">'
+                            html += ' <div class="previewCon c-row a-c">'
+                            html += ' <div class="preview" data-carid = ' + list[i].id + '>预览</div>'
+                            html += ' <div class="previewTip"></div>'
+                            html += '</div>'
+                            html += '<div class="titleImgCon">'
+                            if (list[i].imgurl) {
+                                html += '<img class="titleImg" src="' + list[i].imgurl + '" alt="">'
+                            } else {
+                                html += '<img class="titleImg" src="img/title.png" alt="">'
+                            }
+                            html += ' <a href="./edit.html?carid=' + list[i].id +
+                                '"><div class="titleText c-row a-c j-c">编辑</div></a>'
+                            html += '  </div>'
+                            html += ' <div class="item c-col">'
+                            html += ' <div class="name">' + list[i].renlist[0].name + '</div>'
+                            html += ' <div class="age">' + list[i].renlist[0].age + '岁</div>'
+                            html += ' <div class="text">' + list[i].renlist[0].lstr + '</div>'
+                            html += '<div class="flowerCon c-row a-c">'
+                            html += '<img class="flower" src="img/flower.png" alt="">'
+                            html += '<div>' + list[i].flower + '</div>'
+                            html += ' <img class="msg" src="img/msg.png" alt="">'
+                            html += ' <div>' + list[i].msgcount + '</div>'
+                            html += ' <img class="look" src="img/look.png" alt="">'
+                            html += ' <div>' + list[i].look + '</div>'
+                            html += '</div>'
+                            html += '<a href="./diary.html?carid=' + list[i].id + '">'
+                            html += ' <div class="diary c-row a-c j-c">追思日记</div>'
+                            html += ' </a>'
+                            html += ' </div>'
+                            html += '<div class="item c-col">'
+                            html += ' <div class="name">' + list[i].renlist[1].name + '</div>'
+                            html += ' <div class="age">' + list[i].renlist[1].age + '岁</div>'
+                            html += ' <div class="text">' + list[i].renlist[1].lstr + '</div>'
+                            html += ' <a href="./setting.html?carid=' + list[i].id + '">'
+                            html += ' <div class="diary c-row a-c j-c">功能设置</div>'
+                            html += ' </a>'
+                            html += ' </div>'
+                            html += ' </div>'
+                            html += '<div class="bar"></div>'
+                        } else if (parseInt(list[i].cardtype) == 1) {
+                            html += '<div class="itemWrapper c-row">'
+                            html += ' <div class="previewCon c-row a-c">'
+                            html += ' <div class="preview" data-carid = ' + list[i].id + '>预览</div>'
+                            html += ' <div class="previewTip"></div>'
+                            html += '</div>'
+                            html += '<div class="titleImgCon">'
+                            if (list[i].imgurl) {
+                                html += '<img class="titleImg" src="' + list[i].imgurl + '" alt="">'
+                            } else {
+                                html += '<img class="titleImg" src="img/title.png" alt="">'
+                            }
+                            html += ' <a href="./edit.html?carid=' + list[i].id +
+                                '"><div class="titleText c-row a-c j-c">编辑</div></a>'
+                            html += '  </div>'
+                            html += ' <div class="item c-col">'
+                            html += ' <div class="name">' + list[i].renlist[0].name + '</div>'
+                            html += ' <div class="age">' + list[i].renlist[0].age + '岁</div>'
+                            html += ' <div class="text">' + list[i].renlist[0].lstr + '</div>'
+                            html += '<div class="flowerCon c-row a-c">'
+                            html += '<img class="flower" src="img/flower.png" alt="">'
+                            html += '<div>' + list[i].flower + '</div>'
+                            html += ' <img class="msg" src="img/msg.png" alt="">'
+                            html += ' <div>' + list[i].msgcount + '</div>'
+                            html += ' <img class="look" src="img/look.png" alt="">'
+                            html += ' <div>' + list[i].look + '</div>'
+                            html += '</div>'
+                            html += '<a href="./diary.html?carid=' + list[i].id + '">'
+                            html += ' <div class="diary c-row a-c j-c">追思日记</div>'
+                            html += ' </a>'
+                            html += ' </div>'
+                            html += '<div class="item c-col">'
+                            html += ' <a href="./setting.html?carid=' + list[i].id + '">'
+                            html += ' <div class="diary c-row a-c j-c">功能设置</div>'
+                            html += ' </a>'
+                            html += ' </div>'
+                            html += ' </div>'
+                            html += '<div class="bar"></div>'
+                        }
+                    }
+                    $('.wrapper').append(html)
+
+                } else {
+                    $('.banner').css('display', 'block')
+                    $('.wrapper').css('display', 'none')
+                }
+
+            }
+
+        });
+    }
+    window.onload = function () {
+        $('body').css('display', 'block')
+    };
+</script>
+
+</html>

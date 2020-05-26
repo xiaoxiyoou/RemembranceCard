@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/remid.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <link rel="stylesheet" href="css/mobileSelect.css" />
+    <title>忌日提醒</title>
+</head>
+
+<body>
+    <div class="top c-row a-c j-b">
+        <div class="text">此功能在公众号中提醒，请持续关注我们</div>
+        <div class="btn c-row j-c a-c">+关注</div>
+    </div>
+    <div class="bar"></div>
+    <div class="template   c-row j-b a-c">
+        <div class="text">逝者忌日提醒</div>
+        <img class="switch rem_jr" data-item="rem_jr" src="img/open.png" alt="">
+    </div>
+    <div class="template  c-row j-b a-c">
+        <div class="text">逝者生日提醒</div>
+        <img class="switch rem_sr" data-item="rem_sr" src="img/open.png" alt="">
+    </div>
+    <div class="template   c-row j-b a-c">
+        <div class="text">清明节提醒</div>
+        <img class="switch rem_qm" data-item="rem_qm" src="img/open.png" alt="">
+    </div>
+    <div class="template   c-row j-b a-c">
+        <div class="text">中元节提醒</div>
+        <img class="switch rem_zy" data-item="rem_zy" src="img/open.png" alt="">
+    </div>
+    <div class="template   c-row j-b a-c">
+        <div class="text">寒衣节提醒</div>
+        <img class="switch rem_hy" data-item="rem_hy" src="img/open.png" alt="">
+    </div>
+    <div class="template   c-row j-b a-c">
+        <div class="text">春节提醒</div>
+        <img class="switch rem_cj" data-item="rem_cj" src="img/open.png" alt="">
+    </div>
+  
+    <!-- <div class="template  c-row j-b a-c">
+        <div class="text" id="customValue">自定义日期</div>
+        <label class="item  c-row a-c" for="custom">
+            <input id="custom" type="text" style="width: 1rem;" readonly="readonly">
+            设置
+            <div class="defalut"></div>
+        </label>
+    </div> -->
+    <div class="qrWrapper">
+        <div class="mask"></div>
+        <div class="item c-col j-c a-c">
+            <img class="" src="img/QRcode.png" alt="">
+            <div>长按识别二维码关注我们</div>
+        </div>
+    </div>
+
+
+
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/http.js"></script>
+<script src="js/mobileSelect.min.js"></script>
+<!-- <script src="js/upDate.js"></script> -->
+<script>
+    var carid = getUrlParam("carid");
+    // 遮罩层禁止滑动
+    $('.zhezhao').bind("touchmove", function (e) {
+        e.preventDefault();
+    });
+    // 点击关注
+    $('.btn').click(function () {
+        $('.qrWrapper').css('display', 'block')
+    });
+    // 点击关闭
+    $('.mask').click(function () {
+        $('.qrWrapper').css('display', 'none')
+    });
+    // 开关切换
+    $('.switch').click(function () {
+        if ($(this).attr('src') == 'img/open.png') {
+            $(this).attr('src', 'img/close.png')
+            var item = $(this).attr("data-item");
+            upset(carid, item, 1)
+        } else {
+            $(this).attr('src', 'img/open.png')
+            var item = $(this).attr("data-item");
+            console.log(item)
+            upset(carid, item, 0)
+
+        }
+
+    });
+    // 设置
+    function upset(carid, item, value) {
+        var data = {
+            carid: carid,
+            item: item,
+            value: value,
+
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=upset", "post", data).then(function (res) {
+            console.log('设置', res);
+            if (res.code == 0) {
+                layer.msg("设置成功");
+
+
+            }
+        });
+    }
+    // 设置信息
+    function upsetDetail(carid) {
+        var data = {
+            carid: carid,
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=info", "get", data).then(function (res) {
+            console.log('设置详情', res);
+            if (res.code == 0) {
+                var info = res.data.info
+                console.log('info', info)
+                var rem_jr = info.rem_jr
+                var rem_sr = info.rem_sr
+                var rem_qm = info.rem_qm
+                var rem_zy = info.rem_zy
+                var rem_hy = info.rem_hy
+                var rem_cj = info.rem_cj
+                // 忌日
+                if (rem_jr == 0) {
+                    $('.rem_jr').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_jr').attr('src', 'img/close.png')
+                }
+                // 生日
+                if (rem_sr == 0) {
+                    $('.rem_sr').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_sr').attr('src', 'img/close.png')
+                }
+                // 清明
+                if (rem_qm == 0) {
+                    $('.rem_qm').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_qm').attr('src', 'img/close.png')
+                }
+                // 中元
+                if (rem_zy == 0) {
+                    $('.rem_zy').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_zy').attr('src', 'img/close.png')
+                }
+                // 寒衣
+                if (rem_hy == 0) {
+                    $('.rem_hy').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_hy').attr('src', 'img/close.png')
+                }
+                // 春节
+                if (rem_cj == 0) {
+                    $('.rem_cj').attr('src', 'img/open.png')
+                } else {
+                    $('.rem_cj').attr('src', 'img/close.png')
+                }
+
+            }
+        });
+    }
+    upsetDetail(carid)
+    // function Death(yearth, mouth, day, select, selectval, title, startY, endY) {
+    //     var date = new Date();
+    //     var year = date.getFullYear(); //初始年份
+    //     var month = 01; //初始月份
+    //     var days = new Date(year, month, 0).getDate(); //1970年01月有多少天
+    //     var olddata = [0, 0, 0]; //初始的年月日的定位 显示1970年01月01日
+    //     var mobileSelect1 = new MobileSelect({
+    //         trigger: select,
+    //         title: title,
+    //         wheels: [{
+    //                 data: getObject(year + startY, year + endY, "年")
+    //             },
+    //             {
+    //                 data: getObject(1, 12, "月")
+    //             },
+    //             {
+    //                 data: getObject(1, days, "日")
+    //             }
+    //         ],
+    //         position: [yearth, mouth, day],
+    //         transitionEnd: function (indexArr, data) {
+
+    //         },
+    //         callback: function (indexArr, data) {
+
+    //             $("#customValue").text(data[0].value + data[1].value + data[2].value);
+    //         }
+    //     });
+    // }
+    // Death(230, 5, 5, "#custom", "#custom", "逝者生辰", -230, 0);
+</script>
+
+</html>

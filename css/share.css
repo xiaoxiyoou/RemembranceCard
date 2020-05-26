@@ -1,0 +1,201 @@
+html{
+    background-color: #ffffff;
+}
+body {
+    height: 100%;
+    position: relative;
+}
+
+#app {
+    text-align: center;
+    position: relative;
+    padding-top: .2rem;
+}
+
+.swiper-pagination {
+    position: relative;
+}
+
+.swiper-img {
+    width: 6.25rem;
+    height: 8.34rem;
+    position: relative;
+    z-index: 1;
+}
+
+.tablexqys {
+    position: relative;
+    z-index: 1;
+    width: 6.25rem;
+    height: 8.34rem;
+    margin: 0 auto;
+   
+}
+
+.itemFirst {
+    position: absolute;
+    z-index: 2;
+    width: 100%;
+   
+    bottom: 0rem;
+    padding: 0 .37rem;
+    min-height: 2rem;
+    
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+.textCon{
+    color: #ffffff;
+    text-align: left;
+}
+.textCon>.tip{
+    font-size: 0.18rem;
+}
+.tipImg{
+    width: .45rem;
+    height: .33rem;
+    position: absolute;
+
+}
+.shopname{
+    min-height: .6rem;
+    font-size: .3rem;
+    font-weight: 700;
+   /* text-indent: .5rem; */
+
+}
+.itemFirst>.col>.tip{
+    font-size: 0.18rem;
+    color: #ffffff;
+}
+.img-con {
+    height: 1.44rem;
+    width: 1.44rem;
+    background: #ffffff;
+}
+
+.img-con>.img {
+    width: 1.24rem;
+    height: 1.24rem;
+}
+
+
+
+.leftBuff {
+    width: .4rem;
+    position: absolute;
+    left: -.3rem;
+    top: -.4rem;
+}
+
+.rightBuff {
+    width: .3rem;
+    position: absolute;
+    left: 1.18rem;
+    top: 1.12rem;
+}
+
+.itemSecond>.img-wrapper>.img-con {
+    height: 1.25rem;
+    width: 1.25rem;
+    background: #ffffff;
+}
+
+.itemSecond>.img-wrapper>.img-con>.img {
+    width: 1.15rem;
+    height: 1.15rem;
+}
+
+
+.btm-share {
+    width: 100%;
+    font-size: .32rem;
+    border-radius: 0.08rem;
+    color: #4c4c4c;
+    text-align: center;
+    font-size: .27rem;
+    position: absolute;
+    margin-top: .2rem;
+}
+
+.btm-img {
+    height: 1.39rem;
+    width: 1.04rem;
+    position: relative;
+    z-index: -1;
+    margin: .1rem;
+}
+
+
+
+
+.btm-con {
+    height: 2.55rem;
+    width: 7rem;
+    position: fixed;
+    bottom: 0;
+   
+}
+.btm-img-con {
+    border: .02rem solid #e2e2e2;
+   
+    margin-left: .32rem;
+     position: relative;
+  
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0);
+}
+.btm-img-con:last-child
+{
+   
+}
+
+.btm-hover-con {
+    height: 1.89rem;
+    width: 100%;
+    box-shadow: 0 1px 3px rgba(50, 6, 105, 0.4);
+    -webkit-box-shadow: 0 1px 3px rgba(50, 6, 105, 0.4);
+    z-index: 5;
+    bottom: 0;
+    position: fixed;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+  
+}
+
+
+
+.img-hover {
+    border: .02rem solid #864ece;
+    background: url(../img/sharePage/trian.png) no-repeat right top;
+    background-size: .3rem .3rem;
+}
+
+
+
+#predictImg {
+    width: 6.25rem;
+    height: 8.34rem;
+    top: .2rem;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    position: absolute;
+    z-index: 100;
+}
+ /*滚动条样式*/
+ .innerbox::-webkit-scrollbar {/*滚动条整体样式*/
+    width: 1px;     /*高宽分别对应横竖滚动条的尺寸*/
+    height: 1px;
+}
+.innerbox::-webkit-scrollbar-thumb {/*滚动条里面小方块*/
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    background: rgba(0,0,0,0.2);
+}
+.innerbox::-webkit-scrollbar-track {/*滚动条里面轨道*/
+    -webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);
+    border-radius: 0;
+    background: rgba(0,0,0,0.1);
+}
+

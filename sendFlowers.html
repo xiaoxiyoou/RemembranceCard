@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/sendFlowers.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>送花</title>
+</head>
+
+<body>
+    <div class="flower-wrapper c-row f-w">
+
+    </div>
+    <div class="btmCon c-row ">
+        <div class="item c-row j-c a-c">
+            <div class="text">数量</div>
+            <div class="num">1</div>
+            <img class="add" src="img/flower/add.png" alt="">
+        </div>
+        <div class="confirm  c-row j-c a-c">确认赠送</div>
+
+    </div>
+    <!-- 输入留言 -->
+    <div class="comment-wrapper">
+        <div class="mask"></div>
+        <div class="comment-con c-col j-b a-c">
+            <div class="title">请输入留言赠语</div>
+            <textarea id="textarea" placeholder="请输入留言赠语..." onkeyup="checkTextLen(this)">追忆曾经，历历在目，谢谢你来过我的生命，留下如此美丽的故事。</textarea>
+            <div class="operate c-row j-b a-c">
+                <span class="switch huan0">点我换一句</span>
+                <p class="leaveMsg zdy">自定义留言</p>
+            </div>
+            <div>为故人送上 <span class="flowerNum">1支柳枝</span><span class="numbers"
+                    style="position: absolute;right: .18rem;color: #a0a0a0;font-size: .25rem;margin-top: .05rem;">0 / 50个字</span></div>
+            <div class="btn">提交</div>
+
+        </div>
+    </div>
+
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/http.js"></script>
+<script>
+    var carid = getUrlParam("carid");
+    var proname = ''
+    var proid = ''
+    var num = 1
+    $(function () {
+        var alst = [
+            "追忆曾经，历历在目，谢谢你来过我的生命，留下如此美丽的故事。",
+
+            "回忆像说书的人，用充满乡音的口吻，每当想起你，时光总是那么叫人怀念！ ",
+
+            "遗忘才是真正的死亡，我们都在这里追思，你不曾离去，只是换种形式存在。",
+
+            "借由这里，托去我的思念，愿另一个世界的你，一切安好。",
+
+            "我敲打键盘的声音，是我为你祈祷的心，我在想你。",
+
+            "在我心里，你是永恒的美好，灿烂温暖，值得我念念不忘。",
+        ];
+        //点击自定义留言
+        $('.leaveMsg').on('click', function () {
+            $("#textarea").val('');
+            $("#textarea").focus();
+            var text = $('#textarea')
+        checkTextLen(text)
+        })
+        $(".huan0").click(function () {
+            $("#textarea").val(alst[Math.floor(Math.random() * 6)]);
+            var text = $('#textarea')
+        checkTextLen(text)
+
+        });
+        // 遮罩层禁止滑动
+        $('.zhezhao').bind("touchmove", function (e) {
+            e.preventDefault();
+        });
+        $("#textarea").blur(function () {
+            document.body.scrollTop = 0
+            document.documentElement.scrollTop = 0
+        })
+        // 送花选择
+        $('.flower-wrapper').on('click', '.item', function () {
+            proname = $(this).attr("data-proname");
+            proid = $(this).attr("data-proid");
+            // console.log(proname)
+            // console.log(proid)
+            $(".select").removeClass("select-hover");
+            $(this).find(".select").addClass("select-hover");
+        });
+        //  确定送花种类
+        $(".confirm").click(function () {
+            $(".flowerNum").text(num + '支' + proname)
+            $(".comment-wrapper").css('display', 'block')
+        });
+        //  增加送花数量
+        $(".add").click(function () {
+            num = $('.num').text()
+            num = parseInt(num) + 1
+            $('.num').text(num)
+        });
+        // 关闭评论
+        $(".mask").click(function () {
+            $(".comment-wrapper").css('display', 'none')
+        });
+        // 确定留言
+        $(".btn").click(function () {
+            remark = $('#textarea').val();
+            if (remark) {
+                if (numbers > 50) {
+                    layer.msg("最多输入50字");
+                    return false
+                }
+                sendFlowers(carid, remark, num, proid, proname)
+                $(".comment-wrapper").css('display', 'none')
+            } else {
+                layer.msg("请输入留言内容");
+            }
+        });
+
+
+        getFlowers(carid)
+        var text = $('#textarea')
+        checkTextLen(text)
+
+    });
+
+    function checkTextLen(obj) {
+        numbers = $(obj).val().length;
+        console.log('执行')
+        if (numbers > 50) {
+            layer.msg("最多输入50字");
+            $('.numbers').css('color', 'red')
+        } else {
+            $('.numbers').css('color', '#a0a0a0')
+        }
+        $('.numbers').text(numbers + ' / 50个字')
+    }
+    //    送花留言数据提交
+    function sendFlowers(carid, remark, num, proid, proname) {
+        var data = {
+            carid: carid,
+            remark: remark,
+            number: num,
+            proid: proid,
+            proname: proname
+        }
+        console.log("songhua", data)
+        httpRequest("Action/recallapi?action=msgadd", "post", data).then(function (res) {
+            console.log('送的花数据', res);
+            layer.msg(res.msg);
+            if (res.code == 0) {
+                window.location.replace("http://wx.fuyulove.com/Recall/sendDetailShow.html?carid=" + carid)
+                // location.href = './sendDetailShow.html?carid=' + carid
+                // $("#textarea").val('');
+                // setTimeout(function () {
+                // window.history.back();
+                // }, 500)
+                numbers = 0
+                $('.numbers').text(numbers + ' / 50个字')
+
+            }
+        });
+    }
+    // 花详情请求
+    function getFlowers(carid) {
+        var data = {
+            carid
+        }
+        // console.log('data', data)
+        httpRequest("Action/recallapi?action=prolist", "get", data).then(function (res) {
+            console.log('送的花数据', res);
+            if (res.code == 0) {
+                var data = res.data.list
+                var html = ''
+                for (var i = 0; i < data.length; i++) {
+                    if (i == 0) {
+
+                        html += '<div class="item c-col j-c a-c" data-proname = ' + data[i]
+                            .proname + ' data-proid = ' + data[i].id + '>'
+                        html += '<div class="select select-hover"></div>'
+                        html += '<img class="" src="' + data[i].imgurl + '" alt="">'
+                        html += '<div class="text">' + data[i].proname + '</div>'
+                        html += '</div>'
+                        proname = data[i].proname
+                        proid = data[i].id
+                    } else {
+                        html += '<div class="item c-col j-c a-c" data-proname = ' + data[i]
+                            .proname + ' data-proid = ' + data[i].id + '>'
+                        html += '<div class="select"></div>'
+                        html += '<img class="" src="' + data[i].imgurl + '" alt="">'
+                        html += '<div class="text">' + data[i].proname + '</div>'
+                        html += '</div>'
+                    }
+                }
+                $('.flower-wrapper').append(html)
+            }
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,266 @@
+body{
+    /* display: none; */
+}
+.con {
+    background-color: #f5f5f5;
+    padding-bottom: 3rem;
+    width: 100%;
+}
+
+.top {
+    width: 4rem;
+    height: .61rem;
+    border-radius: .1rem;
+    border: 1px solid #6a6198;
+    margin: 0 auto;
+    background-color: #ffffff;
+    margin-top: .34rem;
+
+}
+
+.tabSingle {
+    width: 50%;
+
+}
+
+.tabDouble {
+    width: 50%;
+
+}
+
+.hover {
+    background-color: #6a6198;
+    color: #ffffff;
+
+}
+
+.peopleMsg {
+    padding: 0 .27rem 0 .33rem;
+    background-color: #ffffff;
+    width: 6.9rem;
+    height: 7.42rem;
+    margin-top: .28rem;
+    border-radius: .1rem;
+}
+
+.deoble {
+    display: none;
+}
+
+.peopleMsg>.item {
+
+    height: .96rem;
+   
+    border-bottom: 1px solid #f5f5f5;  
+    font-size: .31rem;
+    color: #000000;
+
+}
+.peopleMsg>.item>.text{
+}
+.peopleMsg>.item>input{
+   
+}
+input {
+    text-align: right;
+  
+}
+
+.headImgCon {
+  
+    height: 1.6rem;
+    color: #000000;
+    position: relative;
+    font-size: .31rem;
+}
+
+.headImg {
+    width: 1.22rem;
+    height: 1.22rem;
+    position: absolute;
+    right: 0;
+}
+
+.btmMsg {
+    background-color: #ffffff;
+    width: 6.9rem;
+   
+    margin-top: .28rem;
+    border-radius: .1rem;
+    padding: 0 .27rem 0 .33rem;
+
+}
+
+.btmMsg>.item {
+
+    height: .96rem;
+ 
+    border-bottom: 1px solid #f5f5f5;
+    color: #000000;
+    font-size: .31rem;
+
+}
+
+.btmMsg>.item>.btn {
+    width: 1.82rem;
+    height: .55rem;
+    background-color: #6a6198;
+    color: #ffffff;
+    font-size: .24rem;
+    border-radius: .26rem;
+    white-space: nowrap;
+
+}
+
+textarea {
+    width: 6.3rem;
+    height: 4rem;
+    border: 1px solid #f5f5f5;
+    color: #666666;
+    font-size: .28rem !important;
+    padding: .1rem !important;
+}
+
+.layui-upload-list {
+
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding-bottom: 10px;
+}
+
+.imglist {
+
+    position: relative;
+    display: inline-block;
+    margin-top: .2rem;
+
+}
+
+.imglist img {
+    width: 3rem;
+    height: 4rem
+}
+
+
+.delete {
+    width: .4rem;
+    height: .4rem;
+    background-image: url(./../img/colseTwo.png);
+
+    top: -.2rem;
+    right: -.2rem;
+    position: absolute;
+    z-index: 63;
+    background-size: 100% 100%;
+}
+
+.btmCon {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background-color: #ffffff;
+    z-index: 99;
+
+}
+
+form {
+    text-align: right;
+}
+
+.btm {
+    width: 6.9rem;
+    height: .9rem;
+    background-color: #6a6198;
+    color: #ffffff;
+    font-size: .35rem;
+    border-radius: .1rem;
+    margin: .32rem auto;
+}
+
+/* 生平模板样式 */
+.mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .4);
+    z-index: 99;
+    display: none;
+    pointer-events: auto;
+}
+
+.lifeTpl {
+    margin-top: 16%;
+    width: 100%;
+    height: 100%;
+    z-index: 101;
+    background-color: #f5f5f5;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.tplTitle {
+    height: 1.3rem;
+    line-height: 1.3rem;
+    padding-left: 1rem;
+    font-size: .33rem;
+    color: #333333;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 .3rem;
+}
+
+.tplList {
+    height: 80%;
+    overflow-y: auto;
+    padding-bottom: 2rem;
+}
+
+.tplItem {
+    position: relative;
+}
+
+.itemTitle {
+    height: .6rem;
+    line-height: .6rem;
+    font-size: .3rem;
+    color: #333333;
+    padding-left: .3rem;
+    background-color: #f5f5f5;
+}
+
+.itemText {
+    padding: .3rem;
+    padding-bottom: 1rem;
+    font-size: .28rem;
+    color: #666666;
+    background-color: #ffffff;
+}
+
+.selectedTpl {
+    padding: .15rem .5rem;
+    background-color: #6a6198;
+    border-radius: 2rem;
+    position: absolute;
+    right: .3rem;
+    bottom: .15rem;
+    color: #ffffff;
+    font-size: .25rem;
+}
+
+.closeIcon {
+    width: .38rem;
+    height: .38rem;
+}
+.layui-layer-dialog{
+    border-radius: .2rem;
+}
+.layui-layer-btn .layui-layer-btn0{
+    border-color: #6a6198!important;
+    background-color: #6a6198!important;
+}

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <script src="js/rem.js"></script>
+  <link rel="stylesheet" href="css/diary.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="js/need/layer.css" />
+  <title>追思日记</title>
+</head>
+
+<body>
+  <div class="detailCon"></div>
+  <!-- 文本弹出框 -->
+  <div class="contentCon">
+    <div class="mask"></div>
+    <div class="content">
+      <div class="item c-row a-e">
+        <!-- <div class="mouth">2</div>
+          <div class="separate">/</div> -->
+        <div class="day daycopy"></div>
+        <div class="wek wekcopy"></div>
+      </div>
+      <textarea class="msgCon"></textarea>
+      <div class="" style="text-align: right;">
+        <div class="delect">删除</div>
+        <!-- <div class="save">保存</div> -->
+      </div>
+      <img class="close" src="img/guan.png" alt="">
+    </div>
+  </div>
+  <!-- 音频弹出框 -->
+  <div class="audioMask">
+    <div class="mask"></div>
+    <div class="audioWrapper">
+      <div class="item c-row a-e">
+        <div class="day daycopy"></div>
+        <div class="wek wekcopy"></div>
+      </div>
+      <audio controls class="audio" src=""></audio>
+      <div class="delect" style="text-align: center;">删除</div>
+      <img class="close" src="img/guan.png" alt="">
+    </div>
+  </div>
+  <!-- 底部 -->
+  <div class="btm c-col j-c a-c">
+    <div class="title  c-row">
+      <div class="text textHover c-row j-c a-c">音频日记</div>
+      <div class="text c-row j-c a-c">文本日记</div>
+    </div>
+    <div class="textCon">
+      <div class="btn  c-row j-b a-c">
+        <div class="cancel">取消</div>
+        <div class="confirm c-row j-c a-c">发布</div>
+      </div>
+      <textarea id="textarea" onkeyup="checkTextLen(this)"></textarea>
+    </div>
+    <div class="audioCon">
+      <div class="item startAudio c-col j-c a-c">
+        <div class="c-row">
+          <img class="side" src="img/left.gif" alt="" />
+          <div class="time">点击录制</div>
+          <img class="side" src="img/right.gif" alt="" />
+        </div>
+        <img class="audioImg audioImgStart" src="img/begin.png" alt="" />
+        <img class="audioImg audioImgStop" src="img/ongoing.png" alt="" />
+      </div>
+    </div>
+  </div>
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/http.js"></script>
+
+<script>
+  var diaidCon = "";
+  var result = "";
+  var audurlCon = '';
+  var carid = getUrlParam("carid");
+  var msgIndex = 0; //留言排序
+  $(function () {
+    var dtype = 1;
+    // 获取留言列表
+    diarylist(carid);
+    // 遮罩层禁止滑动
+    $(".zhezhao").bind("touchmove", function (e) {
+      e.preventDefault();
+    });
+    // 确定留言
+    $(".confirm").click(function () {
+      var dtype = 0;
+      remark = $("#textarea").val();
+      if (remark) {
+        if (numbers > 300) {
+          layer.msg("最多输入300字");
+          return false
+        }
+        diaryadd(carid, remark, dtype);
+      } else {
+        layer.msg("请输入日记内容");
+      }
+    });
+
+    // 切换音频和文本留言
+    $(".text").click(function () {
+      $(".text ").removeClass("textHover");
+      $(this).addClass("textHover");
+      var index = $(this).index();
+      if (index) {
+        $(".textCon").css("display", "block");
+        $(".audioCon").css("display", "none");
+        dtype = 0;
+        wx.stopRecord({
+          success: function (res) {
+            $(".time").html("点击录制");
+            clearTimeout(timer);
+            $(".audioImgStart").css("display", "block");
+            $(".audioImgStop").css("display", "none");
+            $(".side").css("display", "none");
+          },
+          fail: function (res) {}
+        });
+      } else {
+        $(".textCon").css("display", "none");
+        $(".audioCon").css("display", "block");
+        dtype = 1;
+      }
+    });
+    // 结束录音
+    $(".audioImgStop").click(function () {
+      wx.stopRecord({
+        success: function (res) {
+          $(".time").html("点击录制");
+          clearTimeout(timer);
+          $(".audioImgStart").css("display", "block");
+          $(".audioImgStop").css("display", "none");
+          $(".side").css("display", "none");
+          var localId = res.localId;
+          wx.uploadVoice({
+            localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+            isShowProgressTips: 1, // 默认为1，显示进度提示
+            success: function (res) {
+              var serverId = res.serverId; // 返回音频的服务器端ID
+
+              diaryadd(carid, serverId, 1);
+            }
+          });
+        },
+        fail: function (res) {}
+      });
+    });
+    //
+    //  开始录音
+
+    $(".audioImgStart").click(function () {
+      wx.startRecord({
+        success: function (res) {
+          timedCount();
+          $(".time").html("00:00");
+          $(".audioImgStart").css("display", "none");
+          $(".audioImgStop").css("display", "block");
+          $(".side").css("display", "block");
+        },
+        cancel: function () {
+          // alert('用户拒绝授权录音');
+        }
+      });
+    });
+    // 点击查看评论
+    $(".detailCon").on("click", ".detail", function () {
+      var dtype = $(this).attr("data-dtype");
+      msgIndex = $(this).index();
+      if (dtype == 0) {
+        $(".contentCon").css("display", "block");
+        $(".msgCon").val(result[msgIndex]);
+      } else {
+        $(".audioMask").css("display", "block");
+        $(".audio").attr('src', audurlCon[msgIndex])
+      }
+      $('.daycopy').text($(this).find('.day').text())
+      $('.wekcopy').text($(this).find('.wek').text())
+    });
+    // 关闭评论
+    $(".mask").click(function () {
+      $(".contentCon").css("display", "none");
+      $(".audioMask").css("display", "none");
+    });
+    // 关闭评论
+    $(".close").click(function () {
+      $(".contentCon").css("display", "none");
+      $(".audioMask").css("display", "none");
+    });
+    // 编辑留言
+    $(".save").click(function () {
+      var value = $(".msgCon").val();
+      diaryadd(carid, value, 0);
+    });
+    // 删除留言
+    $(".delect").click(function () {
+      var diaid = diaidCon[msgIndex];
+      diarydel(diaid);
+    });
+    $("#textarea").blur(function () {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+    })
+  });
+  // 统计输入文字
+  function checkTextLen(obj) {
+    numbers = $(obj).val().length;
+    // console.log(numbers)
+    if (numbers > 300) {
+      layer.msg("最多输入300字");
+
+    }
+  }
+
+  // 添加留言
+  function diaryadd(carid, remark, dtype) {
+    var data = {
+      carid,
+      remark,
+      dtype
+    };
+    console.log("data", data);
+    httpRequest("Action/recallapi?action=diaryadd", "post", data).then(
+      function (res) {
+        console.log("添加日记", res);
+        if (res.code == 0) {
+          $("#textarea").val("");
+          diarylist(carid);
+          layer.msg("编辑成功");
+          numbers = 0
+        }
+      }
+    );
+  }
+  // 删除留言
+  function diarydel(diaid) {
+    var data = {
+      diaid
+    };
+    console.log("data", data);
+    httpRequest("Action/recallapi?action=diarydel", "post", data).then(
+      function (res) {
+        console.log("删除日记", res);
+        if (res.code == 0) {
+          diarylist(carid);
+          $(".contentCon").css("display", "none");
+          $(".audioMask").css("display", "none");
+        }
+        layer.msg(res.msg);
+      }
+    );
+  }
+  // 获取留言
+  function diarylist(carid) {
+    var data = {
+      carid
+    };
+    console.log("data", data);
+    httpRequest("Action/recallapi?action=diarylist", "get", data).then(
+      function (res) {
+        console.log("获取留言", res);
+        $(".detailCon").html("");
+        if (res.code == 0) {
+          var data = res.data.list;
+          var html = "";
+          for (var i = 0; i < data.length; i++) {
+            var date = data[i].createdate;
+            var day = date.substring(0, date.lastIndexOf("/"));
+
+            console.log(day);
+
+            html +=
+              '<div class="detail c-row j-b a-c" data-dtype = ' +
+              data[i].dtype +
+              ">";
+            html += ' <div class="item c-row a-e">';
+            // html += '<div class="mouth">2</div>'
+            // html += '<div class="separate">/</div>'
+            html += '<div class="day">' + data[i].date + "</div>";
+            html += ' <div class="wek">' + data[i].week + "</div>";
+            html += "</div>";
+            html += '<div class="btn c-row a-c j-c">';
+            html += '<div class="">查看</div>';
+            html += '<div class="previewTip"></div>';
+            html += "</div>";
+            html += "</div>";
+          }
+          $(".detailCon").append(html);
+          result = data.map(function (item) {
+            return item.remark;
+          });
+          diaidCon = data.map(function (item) {
+            return item.id;
+          });
+          audurlCon = data.map(function (item) {
+            return item.audurl;
+          });
+        }
+      }
+    );
+  }
+
+  // 留言计时器
+  function timedCount() {
+    var second = 0;
+    var minute = 0;
+    timer = setInterval(function () {
+      second++;
+
+      $(".time").html(
+        (Array(2).join(0) + minute).slice(-2) +
+        "：" +
+        (Array(2).join(0) + second).slice(-2) +
+        ""
+      );
+      if (second >= 60) {
+        wx.stopRecord({
+          success: function (res) {
+            $(".time").html("点击录制");
+            clearTimeout(timer);
+            $(".audioImgStart").css("display", "block");
+            $(".audioImgStop").css("display", "none");
+            $(".side").css("display", "none");
+            var localId = res.localId;
+            wx.uploadVoice({
+              localId: localId, // 需要上传的音频的本地ID，由stopRecord接口获得
+              isShowProgressTips: 1, // 默认为1，显示进度提示
+              success: function (res) {
+                var serverId = res.serverId; // 返回音频的服务器端ID
+
+                diaryadd(carid, serverId, 1);
+              }
+            });
+          },
+          fail: function (res) {}
+        });
+
+      }
+    }, 1000);
+    if (second >= 60) {
+      minute++;
+      second = 0;
+    }
+  }
+</script>
+
+</html>

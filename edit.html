@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <script src="js/rem.js"></script>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/created.css" />
+  <link rel="stylesheet" href="css/mobileSelect.css" />
+  <link rel="stylesheet" href="css/dialog.min.css" />
+  <link rel="stylesheet" href="css/mobile-select-area.min.css" />
+  <link rel="stylesheet" href="js/need/layer.css" />
+  <link rel="stylesheet" href="css/layui.css" />
+  <title>编辑追思卡</title>
+</head>
+
+<body>
+  <div class="con c-col a-c">
+    <form>
+      <div class="top c-row ">
+        <div class="tabDouble hover c-row j-c a-c">单人</div>
+        <div class="tabDouble  c-row j-c a-c">双人</div>
+      </div>
+      <div class="peopleMsg">
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者姓名</div>
+          <input type="text" name="name" placeholder="请输入姓名" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者生日</div>
+          <input type="text" name="birthday" id="birth" readonly="readonly" autocomplete="off" placeholder="请选择日期"
+            value="" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">离世时间</div>
+          <input type="text" name="deathdate" id="death" readonly="readonly" placeholder="请选择日期" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝世年龄</div>
+          <input type="number" name="age" placeholder="请输入年龄" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">出生地</div>
+          <input type="text" name="birthaddr" id="txt_area" readonly="readonly" placeholder="请选择地址" value=""
+            style="width: 5rem;" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">安葬陵园</div>
+          <input type="text" name="buryaddr" placeholder="请输入陵园名称" value="" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">逝者遗相</div>
+          <img class="headImg" id="ImageUp" src="img/headUp.png" alt="" />
+          <input id="PicturePath" name="Imgurl" type="hidden" value="" />
+        </div>
+      </div>
+      <div class="peopleMsg deoble">
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者姓名</div>
+          <input type="text" name="name" placeholder="请输入姓名" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者生日</div>
+          <input type="text" name="birthday" id="birthTwo" readonly="readonly" placeholder="请选择日期" value="" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">离世时间</div>
+          <input type="text" name="deathdate" id="deathTwo" readonly="readonly" placeholder="请选择日期" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝世年龄</div>
+          <input type="number" name="age" placeholder="请输入年龄" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">出生地</div>
+          <input type="text" name="birthaddr" id="txt_area_two" readonly="readonly" placeholder="请选择地址" value=""
+            style="width: 5rem;" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">安葬陵园</div>
+          <input type="text" name="buryaddr" placeholder="请输入陵园名称" value="" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">逝者遗相</div>
+          <img class="headImg" id="ImageUpTwo" src="img/headUp.png" alt="" />
+          <input id="PicturePathTwo" name="Imgurl" type="hidden" value="" />
+        </div>
+      </div>
+      <div class="btmMsg">
+        <div class="item c-row j-b a-c">
+          <div class="text" style="color: #6a6198;">追思内容</div>
+          <div class="btn titleR c-row a-c j-c">选择追思模版</div>
+        </div>
+        <textarea id="Life" name="life" onkeyup="checkTextLen(this)"></textarea>
+        <div class="item c-row j-b a-c">
+          <div class="text">追思人姓名</div>
+          <input name="fallname" id="fallname" type="text" placeholder="请输入追思人姓名" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">美好回忆</div>
+          <img class="headImg" src="img/headUp.png" alt="" onclick="loadPic()" />
+        </div>
+        <iframe id="upimg1" style="width:4rem;height:4rem;padding-top:.5rem;float:right; display:none;"
+          src="./upLoad.html" scrolling="no" frameborder="0"></iframe>
+        <div class="layui-upload-list alltu" id="lblimglist"></div>
+      </div>
+      <input type="hidden" name="sid" id="sid" value="" />
+      <input type="hidden" name="cardtype" id="cardtype" value="1" />
+      <input type="hidden" name="imglist" id="imglist" value="" />
+      <input type="hidden" name="carid" id="carid" value="" />
+    </form>
+    <!-- 生平模板 -->
+    <div class="mask">
+      <div class="lifeTpl">
+        <div class="tplTitle">
+          <span>追思模板选用</span>
+          <img class="closeIcon" src="img/close_icon.png" alt="Alternate Text" />
+        </div>
+        <div class="tplList">
+          <div class="tplItem">
+            <div class="itemTitle">母亲</div>
+            <div class="itemText">
+              母亲的一生，可以说是艰辛备至，劳苦功高，是经历坎坷、饱经风霜的一生；是勤劳简朴的一生；是平凡无奇、朴实无华的一生；是善良贤明、通情达理的一生；是和亲睦邻、乐善好施的一生。
+              她没有惊天动地的壮举，也没有流芳百世的伟业，但他的人格力量和优秀的品德，永远激励着子孙后代，他的音容笑貌永远活在子孙心中。
+            </div>
+            <div class="selectedTpl">选用此模板</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  <div class="btmCon c-row j-c a-c">
+    <div class="btm c-row j-c a-c">确认修改</div>
+  </div>
+
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/http.js"></script>
+<script src="js/dialog.min.js"></script>
+<script src="js/upImg.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/mobileSelect.min.js"></script>
+<script src="js/mobile-select-area.min.js"></script>
+<script src="js/upDateEdit.js"></script>
+<script src="js/address.js"></script>
+<script src="js/lifeTemplate.js"></script>
+<script>
+  numbers = $("#Life").val().length;
+  $(function () {
+    $("#Life").blur(function () {
+      document.body.scrollTop = 0
+      document.documentElement.scrollTop = 0
+    })
+    // 删除美好回忆
+    $('body').on('click', '.delete', function () {
+      $(this).closest('.imglist').remove()
+    });
+    // 遮罩层禁止滑动
+    $(".zhezhao").bind("touchmove", function (e) {
+      e.preventDefault();
+    });
+    var allurl = ""; //回忆多图
+    $(".btmCon").click(function () {
+      $("#lblimglist")
+        .find(".imglist img")
+        .each(function () {
+          i = i + 1;
+          allurl += $(this).attr("src") + "|";
+        });
+
+      console.log("allurl", allurl);
+      document.getElementById("imglist").value = allurl;
+      if (i > 41) {
+        layer.msg("图片上传最多不能超过40张");
+        return false;
+      }
+
+      var params = $("form").serialize();
+      //   判断是否为空
+      var inputName = [];
+      var birthday = [];
+      var deathdate = [];
+      if ($('#cardtype').val() == 1) {
+        inputName = $("input[name='name']").val().trim();
+        birthday = $("input[name='birthday']").val();
+        deathdate = $("input[name='deathdate']").val();
+      }
+      if ($('#cardtype').val() == 2) {
+        $("input[name='name']").each(function () {
+          var value = $(this).val();
+          // inputName.push($(this).val());
+          if (!value) {
+            inputName = value;
+          }
+        });
+        $("input[name='birthday']").each(function () {
+          // birthday.push($(this).val());
+          var value = $(this).val();
+          if (!value) {
+            birthday = value;
+          }
+        });
+        $("input[name='deathdate']").each(function () {
+          // deathdate.push($(this).val());
+          var value = $(this).val();
+          if (!value) {
+            deathdate = value;
+          }
+        });
+      }
+      console.log("inputName", inputName);
+      if (!inputName) {
+        layer.msg("请输入姓名");
+        return false;
+      }
+
+      if (!birthday) {
+        layer.msg("请输入逝者生日");
+        return false;
+      }
+      if (!deathdate) {
+        layer.msg("请输入离世时间");
+        return false;
+      }
+      if (numbers > 1000) {
+        layer.msg("逝者生平最多输入1000字");
+        return false;
+      }
+      console.log("params", decodeURIComponent(params));
+      console.log($('#cardtype').val())
+      editPut(params)
+
+    });
+    // 单双人切换
+    $(".tabDouble").click(function () {
+      $(".tabDouble ").removeClass("hover");
+      $(this).addClass("hover");
+      var index = $(".tabDouble ").index(this);
+      $('#cardtype').val(index + 1);
+      if (index) {
+        $(".deoble").css("display", "block");
+        lefTempalte()
+      } else {
+        $(".deoble").css("display", "none");
+        lefTempalte()
+      }
+
+
+    });
+    window.onload = function () {
+      $('body').css('display', 'block')
+    };
+    // 编辑资料
+    function editPut(params) {
+      var data = params;
+      console.log('data', data)
+      httpRequest("Action/recallapi?action=edit", "post", data).then(function (res) {
+        console.log(res);
+        if (res.code == 0) {
+          var carid = res.data.carid
+          // window.history.back();
+          window.location.replace("http://wx.fuyulove.com/Recall/index.html")
+        } else {
+          layer.msg(res.msg);
+        }
+      });
+    }
+
+    function getUrlParam(name) {
+      var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+      var r = window.location.search.substr(1).match(reg); //匹配目标参数
+      if (r != null) return decodeURI(r[2]);
+      return null; //返回参数值
+    }
+    var carid = getUrlParam("carid");
+    $('#carid').val(carid)
+    edit(carid)
+
+    function edit(carid) {
+      var data = {
+        carid: carid
+      }
+
+      httpRequest("/Action/recallapi?action=view", "get", data).then(function (res) {
+        console.log('获取数据', res);
+        if (res.code == 0) {
+          var cardtype = res.data.info.cardtype
+          console.log('cardtype', cardtype)
+          var list = res.data.list
+          if (cardtype == 2) {
+
+            $(".deoble").css("display", "block");
+            $('.tabDouble').eq(0).removeClass('hover')
+            $('.tabDouble').eq(1).addClass('hover ')
+            $('#cardtype').val(res.data.info.cardtype);
+
+            // 两个人的姓名出生日期
+            $("input[name='name']").eq(1).val(list[1].name)
+            $("input[name='age']").eq(1).val(list[1].age)
+            $("input[name='birthaddr']").eq(1).val(list[1].birthaddr)
+            $("input[name='buryaddr']").eq(1).val(list[1].buryaddr)
+            $("#birthTwo").val(list[1].shengri)
+            $("#deathTwo").val(list[1].jiri)
+            //  头像
+            if (list[1].imgurl) {
+              $('#ImageUpTwo').attr('src', list[1].imgurl)
+              $('#PicturePathTwo').val(list[1].imgurl)
+            }
+            // 逝者信息
+            Death(list[1].sryear, list[1].srmonth, list[1].srday - 1, "#birthTwo", "#birthTwo", "逝者生日", -230,
+              0);
+            Death(list[1].jryear, list[1].jrmonth, list[1].jrday - 1, "#deathTwo", "#deathTwo", "离世时间", -230,
+              0);
+            lefTempalte()
+
+          }
+          if (cardtype == 1) {
+            Death(200, 5, 5, "#deathTwo", "#deathTwo", "离世时间", -230, 0);
+            Death(145, 5, 5, "#birthTwo", "#birthTwo", "逝者生日", -230, 0);
+          }
+          // 逝者信息
+          Death(list[0].sryear, list[0].srmonth, list[0].srday - 1, "#birth", "#birth", "逝者生日", -230, 0);
+          Death(list[0].jryear, list[0].jrmonth, list[0].jrday - 1, "#death", "#death", "离世时间", -230, 0);
+
+
+          $("input[name='name']").eq(0).val(list[0].name)
+          $("input[name='age']").eq(0).val(list[0].age)
+          $("input[name='birthaddr']").eq(0).val(list[0].birthaddr)
+          $("input[name='buryaddr']").eq(0).val(list[0].buryaddr)
+          $("#birth").val(list[0].shengri)
+          $("#death").val(list[0].jiri)
+          //  头像
+          if (list[0].imgurl) {
+            $('#ImageUp').attr('src', list[0].imgurl)
+            $('#PicturePath').val(list[0].imgurl)
+          }
+          // 逝者生平
+          var life = res.data.info.life
+          if (life) {
+            $('textarea').text(life)
+          }
+          var fallname = res.data.info.fallname
+          if (fallname) {
+            $("#fallname").val(fallname)
+          }
+          // 商家id
+          var shopid = res.data.info.shopid
+          $("#sid").val(shopid)
+          //  生平图片
+          var imglist = res.data.info.imglist
+          if (imglist) {
+            var imglist = imglist.split("|")
+            var html = ''
+            for (var i = 0; i < imglist.length - 1; i++) {
+              html += '<div class="imglist">'
+              html += '<img src="' + imglist[i] + '" alt="">'
+              html += '<div class="delete"></div>'
+              html += '</div>'
+            }
+            $('#lblimglist').append(html)
+          }
+
+
+        }
+      });
+    }
+
+
+  });
+  // 统计输入文字
+  function checkTextLen(obj) {
+    numbers = $(obj).val().length;
+    if (numbers > 1000) {
+      layer.msg("逝者生平最多输入1000字");
+    }
+  }
+</script>
+
+</html>

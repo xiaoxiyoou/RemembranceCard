@@ -1,0 +1,278 @@
+﻿@charset "UTF-8";
+
+html {
+    background-color: rgb(245, 245, 245);
+    font-size: 50px;
+}
+
+@media (min-width: 320px){html{font-size: 42.6667px;} }
+@media (min-width: 360px){html{font-size: 48px;} }
+@media (min-width: 375px){html{font-size: 50px;} }
+@media (min-width: 384px){html{font-size: 51.2px;} }
+@media (min-width: 414px){html{font-size: 55.2px;} }
+@media (min-width: 448px){html{font-size: 59.7333px;} }
+@media (min-width: 480px){html{font-size: 48px;} }
+@media (min-width: 512px){html{font-size: 68.2667px;} }
+@media (min-width: 544px){html{font-size: 72.5333px;} }
+@media (min-width: 576px){html{font-size: 76.8px;} }
+@media (min-width: 608px){html{font-size: 81.0667px;} }
+@media (min-width: 640px){html{font-size: 85.3333px;} }
+@media (min-width: 750px){html{font-size: 100px;} }
+
+body {
+    width: 100%;
+    padding: 0px;
+    margin: 0 auto;
+    font-size: 14px;
+    font-family: "微软雅黑", Arial, Helvetica, sans-serif;
+    background-color: rgb(255, 255, 255);
+    letter-spacing: 1px;
+    height: 100%;
+
+}
+/* body {
+    -webkit-text-size-adjust: 100%;
+} */
+form{
+   
+    padding: 0px;
+  
+}
+* {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    box-sizing: border-box;
+}
+
+a,
+a:hover,
+a:active,
+a:visited,
+a:link,
+a:focus {
+
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+    -webkit-tap-highlight-color: transparent;
+
+    outline: none;
+
+    background: none;
+
+    text-decoration: none;
+
+}
+
+.clear {
+    clear: both;
+}
+
+img {
+    border: 0px;
+}
+
+li {
+    list-style-type: none;
+}
+
+
+
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+input[type="text"],
+textarea {
+    -webkit-appearance: none;
+}
+
+
+fieldset,
+img,
+input,
+button {
+    /*fieldset组合表单中的相关元素*/
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline-style: none;
+}
+
+ul,
+ol {
+    list-style: none;
+    /*清除列表风格*/
+}
+
+input {
+    padding-top: 0;
+    padding-bottom: 0;
+    font-family: "微软雅黑";
+}
+
+select,
+input {
+    vertical-align: middle;
+}
+
+select,
+input,
+textarea {
+    margin: 0;
+}
+
+select {
+    /*Chrome和Firefox里面的边框是不一样的，所以复写了一下*/
+    border: solid 1px #fff;
+    /*很关键：将默认的select选择框样式清除*/
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    /*将背景改为红色*/
+    background: #ff927e;
+    /*加padding防止文字覆盖*/
+    padding-right: .2rem;
+    padding-left: .2rem;
+    color: #fff;
+    text-align: center;
+    height: .4rem;
+    line-height: .4rem;
+    font-size: .29rem;
+}
+
+/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
+
+select::-ms-expand {
+    display: none;
+}
+
+input[type=button] {
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+textarea {
+    resize: none;
+}
+
+/*防止多行文本框拖动*/
+
+img {
+    border: 0;
+    vertical-align: middle;
+}
+
+/*  去掉图片低测默认的3像素空白缝隙*/
+
+table {
+    border-collapse: collapse;
+    /*合并外边线*/
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+.clearfix {
+    *zoom: 1;
+    /*IE/7/6*/
+}
+
+a {
+    color: rgb(51, 51, 51);
+    text-decoration: none;
+}
+
+html {
+    color: rgb(51, 51, 51);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-decoration: none;
+    font-weight: normal;
+    /*这个地方不再设置100%*/
+}
+
+s,
+i,
+em {
+    font-style: normal;
+    text-decoration: none;
+}
+
+.fl {
+    float: left !important;
+}
+
+.fr {
+    float: right !important;
+}
+
+.al {
+    text-align: left
+}
+
+.ac {
+    text-align: center
+}
+
+.ar {
+    text-align: right
+}
+
+.hide {
+    display: none
+}
+
+.c-row {
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.c-col {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+.j-c {
+    justify-content: center;
+}
+
+.j-b {
+    justify-content: space-between;
+}
+
+.j-a {
+    justify-content: space-around;
+}
+
+.a-c {
+    align-items: center;
+}
+
+.f-e {
+    justify-content: flex-end;
+}
+
+.a-e {
+    align-items: flex-end;
+}
+
+.f-w {
+    flex-wrap: wrap;
+}
+
+.t-c {
+    text-align: center;
+}

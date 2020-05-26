@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <script src="js/rem.js"></script>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/created.css" />
+  <link rel="stylesheet" href="css/frame.css" />
+  <link rel="stylesheet" href="css/mobileSelect.css" />
+  <link rel="stylesheet" href="css/dialog.min.css" />
+  <link rel="stylesheet" href="css/mobile-select-area.min.css" />
+  <link rel="stylesheet" href="js/need/layer.css" />
+  <link rel="stylesheet" href="css/layui.css" />
+  <title>创建追思卡</title>
+</head>
+
+<body>
+  <div class="con c-col a-c">
+    <form>
+      <div class="top c-row ">
+        <div class="tabDouble hover c-row j-c a-c">单人</div>
+        <div class="tabDouble  c-row j-c a-c">双人</div>
+      </div>
+      <div class="peopleMsg">
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者姓名</div>
+          <input type="text" name="name" placeholder="请输入姓名" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者生日</div>
+          <input type="text" name="birthday" id="birth" readonly="readonly" placeholder="请选择日期" value="" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">离世时间</div>
+          <input type="text" name="deathdate" id="death" readonly="readonly" placeholder="请选择日期" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝世年龄</div>
+          <input type="number" name="age" placeholder="请输入年龄" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">出生地</div>
+          <input type="text" name="birthaddr" id="txt_area" readonly="readonly" placeholder="请选择地址" value=""
+            style="width: 5rem;" />
+
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">安葬陵园</div>
+          <input type="text" name="buryaddr" placeholder="请输入陵园名称" value="" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">逝者遗相</div>
+          <img class="headImg" id="ImageUp" src="img/headUp.png" alt="" />
+          <input id="PicturePath" name="Imgurl" type="hidden" value="" />
+        </div>
+      </div>
+      <div class="peopleMsg deoble">
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者姓名</div>
+          <input type="text" name="name" placeholder="请输入姓名" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝者生日</div>
+          <input type="text" name="birthday" id="birthTwo" readonly="readonly" placeholder="请选择日期" value="" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">离世时间</div>
+          <input type="text" name="deathdate" id="deathTwo" readonly="readonly" placeholder="请选择日期" />
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">逝世年龄</div>
+          <input type="number" name="age" placeholder="请输入年龄" />
+
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">出生地</div>
+          <input type="text" name="birthaddr" id="txt_area_two" readonly="readonly" placeholder="请选择地址" value=""
+            style="width: 5rem;" />
+
+        </div>
+        <div class="item c-row j-b a-c">
+          <div class="text">安葬陵园</div>
+          <input type="text" name="buryaddr" placeholder="请输入陵园名称" value="" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">逝者遗相</div>
+          <img class="headImg" id="ImageUpTwo" src="img/headUp.png" alt="" />
+          <input id="PicturePathTwo" name="Imgurl" type="hidden" value="" />
+        </div>
+      </div>
+      <div class="btmMsg">
+        <div class="item c-row j-b a-c">
+          <div class="text" style="color: #6a6198;">追思内容</div>
+          <div class="btn titleR c-row a-c j-c">选择追思模版</div>
+        </div>
+        <textarea id="Life" name="life" onkeyup="checkTextLen(this)"></textarea>
+        <div class="item c-row j-b a-c">
+          <div class="text">追思人姓名</div>
+          <input name="fallname" type="text" placeholder="请输入追思人姓名" />
+        </div>
+        <div class="headImgCon  c-row j-b a-c">
+          <div class="text">美好回忆</div>
+          <img class="headImg" src="img/headUp.png" alt="" onclick="loadPic()" />
+        </div>
+        <iframe id="upimg1" style="width:4rem;height:4rem;padding-top:.5rem;float:right; display:none;"
+          src="./upLoad.html" scrolling="no" frameborder="0"></iframe>
+        <div class="layui-upload-list alltu" id="lblimglist"></div>
+      </div>
+      <input type="hidden" name="sid" id="sid" value="" />
+      <input type="hidden" name="cardtype" id="cardtype" value="1" />
+      <input type="hidden" name="imglist" id="imglist" value="" />
+    </form>
+    <!-- 生平模板 -->
+    <div class="mask">
+      <div class="lifeTpl">
+        <div class="tplTitle">
+          <span>追思模板选用</span>
+          <img class="closeIcon" src="img/close_icon.png" alt="Alternate Text" />
+        </div>
+        <div class="tplList">
+          <div class="tplItem">
+            <div class="itemTitle">母亲</div>
+            <div class="itemText">
+              母亲的一生，可以说是艰辛备至，劳苦功高，是经历坎坷、饱经风霜的一生；是勤劳简朴的一生；是平凡无奇、朴实无华的一生；是善良贤明、通情达理的一生；是和亲睦邻、乐善好施的一生。
+              她没有惊天动地的壮举，也没有流芳百世的伟业，但他的人格力量和优秀的品德，永远激励着子孙后代，他的音容笑貌永远活在子孙心中。
+            </div>
+            <div class="selectedTpl">选用此模板</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btmCon c-row j-c a-c">
+    <div class="btm c-row j-c a-c">创建</div>
+  </div>
+  <div class="qrWrapper">
+    <div class="qrmask"></div>
+    <div class="item c-col j-c a-c">
+      <img class="qrimg" src="img/QRcode.png" alt="">
+      <div style="white-space: nowrap;">关注 “赋予爱的亲人尽孝服务平台” 创建追思卡</div>
+    </div>
+  </div>
+
+  <script src="js/jquery-1.8.2.js"></script>
+  <script src="js/noScaling.js"></script>
+  <script src="js/layer.js"></script>
+  <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+  <script src="js/shareComment.js"></script>
+  <script src="js/http.js"></script>
+  <script src="js/lifeTemplate.js"></script>
+  <script src="js/dialog.min.js"></script>
+  <script src="js/upImg.js"></script>
+  <script src="js/jquery.cookie.js"></script>
+  <script src="js/login.js"></script>
+  <script src="js/mobileSelect.min.js"></script>
+  <script src="js/mobile-select-area.min.js"></script>
+  <script src="js/address.js"></script>
+  <script src="js/upDate.js"></script>
+
+  <script>
+    numbers = $("#Life").val().length;
+    console.log('numbers', numbers)
+    var cardtype = 1;
+    $(function () {
+      $("#Life").blur(function () {
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
+      })
+      var shopid = getUrlParam("shopid");
+      // 取到商家id
+      console.log('shopid', shopid)
+      $("#sid").val(shopid);
+
+      var allurl = ""; //回忆多图
+      $(".btmCon").click(function () {
+        // 美好回忆图片处理
+        $("#lblimglist")
+          .find(".imglist img")
+          .each(function () {
+            i = i + 1;
+            allurl += $(this).attr("src") + "|";
+          });
+
+        console.log("allurl", allurl);
+        document.getElementById("imglist").value = allurl;
+        if (i > 41) {
+          layer.msg("图片上传最多不能超过40张");
+          return false;
+        }
+        var params = $("form").serialize();
+        //   空数据判断
+        var inputName = [];
+        var birthday = [];
+        var deathdate = [];
+        if (cardtype == 1) {
+          inputName = $("input[name='name']")
+            .val()
+            .trim();
+          birthday = $("input[name='birthday']").val();
+          deathdate = $("input[name='deathdate']").val();
+        }
+        if (cardtype == 2) {
+          $("input[name='name']").each(function () {
+            var value = $(this).val();
+            // inputName.push($(this).val());
+            if (!value) {
+              inputName = value;
+            }
+          });
+          $("input[name='birthday']").each(function () {
+            // birthday.push($(this).val());
+            var value = $(this).val();
+            if (!value) {
+              birthday = value;
+            }
+          });
+          $("input[name='deathdate']").each(function () {
+            // deathdate.push($(this).val());
+            var value = $(this).val();
+            if (!value) {
+              deathdate = value;
+            }
+          });
+        }
+
+
+        console.log("inputName", inputName);
+        if (!inputName) {
+          layer.msg("请输入姓名");
+          return false;
+        }
+
+        if (!birthday) {
+          layer.msg("请输入逝者生日");
+          return false;
+        }
+        if (!deathdate) {
+          layer.msg("请输入离世时间");
+          return false;
+        }
+        if (numbers > 1000) {
+          layer.msg("逝者生平最多输入1000字");
+          return false;
+        }
+        console.log("params", decodeURIComponent(params));
+        console.log($("#cardtype").val());
+        // console.log($('#userid').val())
+        created(params);
+      });
+      // 单双人切换
+      $(".tabDouble").click(function () {
+        $(".tabDouble ").removeClass("hover");
+        $(this).addClass("hover");
+        var index = $(".tabDouble ").index(this);
+        cardtype = index + 1;
+        $("#cardtype").val(cardtype);
+        if (index) {
+          $(".deoble").css("display", "block");
+          console.log('cardtype', cardtype)
+          document.body.scrollTop = document.documentElement.scrollTop = 0
+          $('.tplList').scrollTop(0);
+          lefTempalte()
+        } else {
+          $(".deoble").css("display", "none");
+          console.log('cardtype', cardtype)
+          document.body.scrollTop = document.documentElement.scrollTop = 0
+          $('.tplList').scrollTop(0);
+          lefTempalte()
+        }
+
+      });
+      replaceState();
+      window.addEventListener("popstate", function (e) {
+        layer.confirm('您确定要退出编辑吗？', {
+          btn: ['确定', '取消']
+        }, function () {
+          // window.location.replace("http://wx.fuyulove.com/Recall/index.html?shopid=" + shopid)
+          window.history.go(-1)
+        }, function () {
+          replaceState();
+        });
+      }, false);
+
+      function replaceState() {
+        var state = {
+          title: "title",
+          url: "#"
+        };
+        window.history.pushState(state, "title", "#");
+      }
+      // 用户信息
+      getuserinfo(shopid)
+      // 删除美好回忆
+      $('body').on('click', '.delete', function () {
+        $(this).closest('.imglist').remove()
+      });
+    });
+    // 统计输入文字
+    function checkTextLen(obj) {
+      numbers = $(obj).val().length;
+      // console.log(numbers)
+      if (numbers > 1000) {
+        layer.msg("逝者生平最多输入1000字");
+      }
+    }
+    // 创建数据请求
+    function created(params) {
+      var data = params;
+      // console.log('data', data)
+      httpRequest("Action/recallapi?action=add", "post", data).then(function (
+        res
+      ) {
+        console.log(res);
+        if (res.code == 0) {
+          var carid = res.data.carid;
+          window.location.replace("./middlePage.html?carid=" + carid)
+        } else {
+          layer.msg("创建失败，请重试");
+        }
+      });
+    }
+    // 用户信息
+    function getuserinfo(shopid) {
+      var data = {
+        shopid: shopid
+      }
+      httpRequest("Action/recallapi?action=getuserinfo", "get", data).then(function (res) {
+        console.log('个人信息', res);
+        if (res.code == 0) {
+          var codeurl = res.data.codeurl
+          $('.qrimg').attr('src', codeurl)
+          var state = res.data.state
+          if (state == 0) {
+            $('.qrWrapper').css('display', 'block')
+          }
+        } else if (res.code == -1) {
+          // 用户身份错误，重新登录
+          GetCode()
+        } else {
+          layer.msg(res.msg);
+        }
+      });
+    }
+
+    function GetCode() {
+      var code = getUrlParam("code");
+      if (code == '' || code == undefined) {
+        let appid = "wx3a1c77d8059257bf";
+        let redirect_url = window.location.href
+        let url = 'http://wxapi.fuyulove.com/sns/base.aspx?keys=fyloveobit&redirect_uri=' + redirect_url;
+        window.location.href = url
+      } else {
+        getUserData(code);
+      }
+
+    }
+
+    function getUserData(code) {
+      $.ajax({
+        url: "http://wx.fuyulove.com/Action/userlogin?code=" + code,
+        dataType: "json",
+        success: function (res) {
+          console.log("登陆信息请求", res)
+          var data = res.data.userinfo
+          var userid = res.data.userid
+          var openid = res.data.openid
+
+          localStorage.setItem("NickName", data.nickname);
+          localStorage.setItem("HeadImg", data.headimgurl);
+          localStorage.setItem("userid", userid);
+          localStorage.setItem("openid", openid);
+          $.cookie('userid', userid, {
+            path: '/'
+          })
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

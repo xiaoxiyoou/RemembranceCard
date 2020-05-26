@@ -1,0 +1,118 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/activity.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>最新活动</title>
+</head>
+
+<body>
+    <div class="con">
+        <img class="noinfo" src="img/noInfo.png" alt="">
+    </div>
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/login.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/http.js"></script>
+
+<script>
+    var shopid = getUrlParam("shopid");
+    console.log(shopid)
+    $(function () {
+        activitityDetail(shopid)
+        // 送花选择
+        $('.con').on('click', '.list', function () {
+            var index = $(this).index() - 1
+            url = $(this).attr("data-url");
+            imgurl = $(this).attr("data-imgurl");
+            remark = remarkCon[index].replace(/\n/g, "<br/>")
+            title = titleCon[index]
+            actdate = actdateCon[index]
+            actover = actoverCon[index]
+            sessionStorage.setItem('imgurl', imgurl)
+            sessionStorage.setItem('remark', remark)
+            sessionStorage.setItem('title', title)
+            sessionStorage.setItem('actdate', actdate)
+            sessionStorage.setItem('actover', actover)
+            if (url) {
+                location.href = url
+            } else {
+                id = $(this).attr("data-id");
+                location.href = './preview.html?id=' + id
+            }
+
+        });
+    });
+
+    function activitityDetail(sid) {
+        var data = {
+            sid
+        }
+        console.log('data', data)
+        httpRequest("Action/recallapi?action=activity", "post", data).then(function (res) {
+            console.log('商家活动', res)
+            var html = ''
+            var list = res.data.list
+            if (list.length) {
+                for (var i = 0; i < list.length; i++) {
+                    html += '<div class="list" data-id = ' + list[i].id +
+                        '    data-imgurl = ' + list[i].imgurl + ' data-remark = ' + list[i].remark +
+                        ' data-title = ' + list[i].title + ' data-createdate = ' + list[i].createdate +
+                        '  data-url = ' + list[i].url + ' >'
+                    html += '<img class="banner" src="' + list[i].imgurl + '" alt="" >'
+                    if (list[i].zt == 0) {
+                        html += '<img class="state" src="img/noStart.png" alt="" >'
+                    }
+                    if (list[i].zt == 1) {
+                        html += '<img class="state" src="img/jinxing.png" alt="" >'
+                    }
+                    if (list[i].zt == 2) {
+                        html += '<img class="state" src="img/jieshu.png" alt="" >'
+                    }
+                    html += '<div class="name">' + list[i].title + '</div>'
+                    if (list[i].actdate && list[i].actover) {
+                        html += ' <div class="dueTime">活动时间：' + list[i].actdate + '-' + list[i].actover +
+                            '</div>'
+                    } else {
+                        html += ' <div class="dueTime">活动时间：暂未设置</div>'
+                    }
+                    html += ' <div class="bar"></div>'
+                    html += '</div>'
+                }
+                $('.con').append(html)
+
+                remarkCon = list.map(function (item) {
+                    return item.remark;
+                });
+
+                actdateCon = list.map(function (item) {
+                    return item.actdate;
+                });
+                actoverCon = list.map(function (item) {
+                    return item.actover;
+                });
+                titleCon = list.map(function (item) {
+                    return item.title;
+                });
+
+            } else {
+                $('.noinfo').css('display', 'block')
+
+            }
+
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+    <title>pc端、移动端通过Canvas及File API缩放、拖拽、旋转、截取并上传图片</title>
+    <link rel="stylesheet" href="css/layui.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .photo_block {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload_block.active {
+            border-color: #ccc;
+        }
+
+        .upload_block {
+            position: relative;
+            height: 300px;
+            border: 2px dashed #e6e6e6;
+            margin: 20px;
+        }
+
+        .icon_image {
+            width: 88px;
+            height: 75px;
+            background: url(img/image.png);
+            margin: 65px auto 0 auto;
+        }
+
+        .btn_upload {
+            position: relative;
+            width: 180px;
+            height: 40px;
+            margin: 10px auto;
+            color: #fff;
+            text-align: center;
+            line-height: 40px;
+            background: #4A99DB;
+            border-radius: 5px;
+        }
+
+        .pc_word {
+            text-align: center;
+        }
+
+        #file {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 40px;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .clip_block {
+            display: none;
+            width: 100%;
+        }
+
+        .clip {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .mask {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            bottom: 20px;
+            right: 20px;
+            pointer-events: none;
+            border: 1px dashed #eee;
+        }
+
+        #ok {
+            width: 40%;
+            height: 35px;
+            color: #fff;
+            /* font-size: 1.1rem; */
+            line-height: 35px;
+            text-align: center;
+            margin: 30px auto;
+            background: #6a6198;
+            border-radius: 5px;
+        }
+
+        .btn_upload {
+            background-color: #6a6198 !important;
+        }
+
+        .turn {
+            width: 40%;
+            height: 35px;
+            color: #fff;
+            /* font-size: 1.1rem; */
+            line-height: 35px;
+            text-align: center;
+            margin: 30px auto;
+            background: #6a6198;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="photo_block">
+        <div class="upload_block">
+            <div class="icon_image"></div>
+            <div class="btn btn_upload">点击选择照片<input type="file" id="file" accept="image/*"></div>
+            <div class="btn btn_upload" id="upload" style="display:none;">微信选择照片</div>
+        </div>
+        <div class="clip_block">
+            <div class="clip">
+                <img src="" id="img">
+            </div>
+            <div id="ok">截取</div>
+        </div>
+    </div>
+    <div class="turn">返回编辑</div>
+    <script src="http://cdn.fuyulove.com/js/jquery.min.js"></script>
+    <script src="http://cdn.fuyulove.com/js/hammer.js"></script>
+    <script src="http://cdn.fuyulove.com/js/jquery.mousewheel.js"></script>
+    <script src="http://cdn.fuyulove.com/js/image_transform.js"></script>
+    <script src="http://cdn.zysky.xin/images/layui/layui.js"></script>
+    <script src="js/layer.js"></script>
+    <script>
+        document.body.addEventListener('touchmove', function (e) {
+            e.preventDefault(); //阻止默认的处理方式(阻止下拉滑动的效果)
+        }, {
+            passive: false
+        }); //passive 参数不能省略，用来兼容ios和android
+        $(".clip").imageTransform({
+            width: 150,
+            height: 200,
+            upload: ".upload_block",
+            file: "#file",
+            view: "#img",
+            ok: "#ok",
+            loadComplete: function () {
+                $(".upload_block").hide()
+                $(".clip_block").show()
+            },
+            clipFinish: function (dataURL) {
+                $('#img').attr('src', dataURL);
+                $('.photo_block').css('display', 'none');
+                saveImageInfo();
+            }
+        })
+        //图片上传
+        function saveImageInfo() {
+
+            var img_data = $('#img').attr('src');
+            if (img_data == "") {
+                // alert('null');
+            }
+
+            $.post("http://cdn.fuyulove.com/Action/UploadImageChaiJian.ashx", {
+                image: img_data
+            }, function (data) {
+                layui.use('layer', function () {
+                    window.parent.document.getElementById(getUrlParam('image_show')).src = data; // 赋值
+                    window.parent.document.getElementById(getUrlParam('image_url')).value = data; // 赋值
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+
+                });
+
+            });
+
+        }
+
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg); //匹配目标参数
+            if (r != null) return unescape(r[2]);
+            return null; //返回参数值
+        }
+        // 关闭弹出层
+        $('.turn').click(function () {
+            parent.layer.closeAll()
+        })
+        parent.wx.error(function (res) {
+            $("#upload").hide();
+        });
+        parent.wx.ready(function () {
+            $("#upload").show();
+        });
+    </script>
+</body>
+
+</html>

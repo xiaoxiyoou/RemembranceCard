@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+  <script src="js/rem.js"></script>
+  <link rel="stylesheet" href="css/sendDetail.css" />
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="js/need/layer.css" />
+  <title>送花留言</title>
+</head>
+
+<body>
+  <div class="top c-row">
+    <div class="item c-col j-c a-c">
+      <div class="title">收到鲜花</div>
+      <div class="textCon c-row a-e">
+        <div class="num">0</div>
+        <img class="flower" src="img/whiteFlower.png" alt="" />
+      </div>
+    </div>
+    <div class="item c-col j-c a-c">
+      <div class="title">收到留言</div>
+      <div class="textCon c-row a-e">
+        <div class="commenNum">0</div>
+        <img class="msg" src="img/wihtemsg.png" alt="" />
+      </div>
+    </div>
+  </div>
+  <div class="content ">
+  </div>
+  <img class="noinfo" src="img/noInfo.png" alt="">
+  <div class="btmCon c-row j-c a-c">
+    <div class="btm c-row j-c a-c">献花并留言</div>
+  </div>
+  <!-- 输入留言 -->
+  <div class="comment-wrapper">
+    <div class="mask"></div>
+    <div class="comment-con c-col j-b a-c">
+      <div class="title">请输入回复内容</div>
+      <textarea id="textarea" placeholder="请输入回复内容..."></textarea>
+      <div class="btn">确定</div>
+
+    </div>
+  </div>
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/http.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+
+<script>
+  $(function () {
+
+    var carid = getUrlParam("carid");
+    // 遮罩层禁止滑动
+    $(".zhezhao").bind("touchmove", function (e) {
+      e.preventDefault();
+    });
+    // 点击留言
+    $(".btmCon").click(function () {
+      location.href = './sendFlowers.html?carid=' + carid
+    });
+    // 点击回复
+    $(".content").on("click", ".btn", function () {
+      msgid = $(this).attr("data-msgid");
+      $(".comment-wrapper").css('display', 'block')
+    });
+    // 点击删除
+    $(".content").on("click", ".dalete", function () {
+      msgid = $(this).attr("data-msgid");
+      msgDelete(carid, msgid)
+
+    });
+    // 确定留言
+    $(".btn").click(function () {
+      reply = $('#textarea').val();
+      if (reply) {
+        msgReply(carid, msgid, reply)
+        $(".comment-wrapper").css('display', 'none')
+      } else {
+        layer.msg("请输入留言内容");
+      }
+    });
+    // 关闭评论
+    $(".mask").click(function () {
+      $(".comment-wrapper").css('display', 'none')
+    });
+    // 留言详情
+    setTimeout(() => {
+      showDetail(carid)
+    }, 100);
+  });
+  // 回复留言
+  function msgReply(carid, msgid, reply) {
+    var data = {
+      carid,
+      msgid,
+      reply
+    }
+    console.log('data', data)
+    httpRequest("Action/recallapi?action=msgreply", "post", data).then(function (res) {
+      console.log('回复', res);
+      if (res.code == 0) {
+        layer.msg("回复成功");
+        $(".comment-wrapper").css('display', 'none')
+        showDetail(carid)
+      }
+    });
+  }
+  // 删除留言
+  function msgDelete(carid, msgid) {
+    var data = {
+      carid,
+      msgid
+    }
+    console.log('data', data)
+    httpRequest("Action/recallapi?action=msgdel", "post", data).then(function (res) {
+      console.log('删除', res);
+      if (res.code == 0) {
+        layer.msg("删除成功");
+        showDetail(carid)
+      }
+    });
+  }
+
+
+  function showDetail(carid) {
+    var data = {
+      carid
+    }
+    // console.log('data', data)
+    httpRequest("Action/recallapi?action=msglist", "get", data).then(function (res) {
+      console.log('留言详情', res);
+      $('.content').empty()
+      if (res.code == 0) {
+
+        var data = res.data.list
+        var count = res.data.count
+        var flower = res.data.flower
+        $('.commenNum').text(count)
+        $('.num').text(flower)
+
+        if (data.length == 0) {
+          $('.noinfo').css('display', 'block')
+          return false
+        }
+        // var NickName = localStorage.getItem('NickName')
+        var html = ''
+        for (var i = 0; i < data.length; i++) {
+          html += ' <div class="item c-row j-b">'
+          html += ' <img class="avater" src="' + data[i].headimgurl + '" alt="" />'
+          html += ' <div class="info">'
+          html += ' <div class="msg">'
+          html += '<div class="name">' + data[i].nickname + '<span style="position:absolute;right:.3rem">' + data[i].proname + '×' + data[i].number + '</sapn></div>'
+          html += '<div class="text">' + data[i].remark + '</div>'
+          html += ' </div>'
+          html += '<div class="btmItem c-row">'
+          html += '<div class="date">' + data[i].createdate + '</div>'
+
+          html += ' </div>'
+          if (data[i].reply) {
+            html += '<div class="replay">'
+            // html += '<div class="ownName">' + NickName + ':</div>'
+            html += '<div class="text">' + data[i].reply + '</div>'
+            html += '</div>'
+          }
+          html += '</div>'
+          html += '</div>'
+        }
+        $('.content').append(html)
+      }
+
+    });
+
+  }
+</script>
+
+</html>

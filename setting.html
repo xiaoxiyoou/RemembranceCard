@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="css/setting.css" />
+    <link rel="stylesheet" href="css/pop.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>功能设置</title>
+</head>
+
+<body>
+    <div class="template  border c-row j-b a-c">
+        <div class="text coleorOne">编辑追思卡</div>
+        <div class="edit  item c-row a-c">
+            <div class="name">修改</div>
+            <div class="defalut"></div>
+        </div>
+    </div>
+    <div class="template border c-row j-b a-c">
+        <div class="text coleorOne">追思卡模板</div>
+        <div class="formwork item c-row a-c">
+            <div class="name tempname">默认</div>
+            <div class="defalut"></div>
+        </div>
+    </div>
+    <div class="template c-row j-b a-c">
+        <div class="text coleorOne">忌日提醒</div>
+        <div class="death  item c-row a-c">
+            <div class="name">默认开启</div>
+            <div class="defalut"></div>
+        </div>
+    </div>
+    <div class="bar"></div>
+    <div class="template   c-row j-b a-c">
+        <div class="text coleorOne">线上留言</div>
+        <img class="switch ismsg" data-item="ismsg" src="img/open.png" alt="">
+    </div>
+    <div class="bar"></div>
+    <div class="mine  coleorOne c-row j-c a-c">我的追思卡</div>
+    <div class="bar"></div>
+    <div class="delete c-row j-c a-c">删除追思卡</div>
+    <div class="bar"></div>
+    <!-- 删除弹框 -->
+    <div class="deleteWrapper">
+        <div class="mask"></div>
+        <div class="item">
+            <div class="deleteCon c-col a-c">
+                <div class="tip">确认删除此追思卡？</div>
+                <div class="confirm c-col a-c j-c">确认删除</div>
+                <img class="close" src="img/closeTwo.png" alt="">
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/login.js"></script>
+<script src="js/http.js"></script>
+
+<script>
+    var carid = getUrlParam("carid");
+    $(function () {
+        upsetDetail(carid)
+        // 忌日提醒
+        $(".death").click(function () {
+            window.location.href = './remind.html?carid=' + carid
+        })
+        // 修改模板
+        $(".formwork").click(function () {
+            window.location.href = './template.html?carid=' + carid
+        })
+        // 编辑
+        $(".edit").click(function () {
+            window.location.href = './edit.html?carid=' + carid
+        })
+        // 我的追思卡
+        $(".mine").click(function () {
+            window.location.href = './index.html?shopid=' + shopid
+        })
+        // 开关切换
+        $('.switch').click(function () {
+            if ($(this).attr('src') == 'img/open.png') {
+                $(this).attr('src', 'img/close.png')
+                var item = $(this).attr("data-item");
+                upset(carid, item, 1)
+            } else {
+                $(this).attr('src', 'img/open.png')
+                var item = $(this).attr("data-item");
+                console.log(item)
+                upset(carid, item, 0)
+            }
+        });
+        // 删除追思卡
+        $(".delete ").click(function () {
+            $('.deleteWrapper').css('display', 'block')
+        })
+        // 关闭删除追思卡
+        $(".close ").click(function () {
+            $('.deleteWrapper').css('display', 'none')
+        })
+        // 关闭删除追思卡
+        $(".mask ").click(function () {
+            $('.deleteWrapper').css('display', 'none')
+        })
+        //确定 删除追思卡
+        $(".confirm").click(function () {
+            del(carid)
+        })
+    });
+    // 删除追思卡
+    function del(carid) {
+        var data = {
+            carid: carid,
+
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=del", "post", data).then(function (res) {
+            console.log('设置', res);
+            if (res.code == 0) {
+                setTimeout(function () {
+                    // window.history.back();
+                    window.location.replace("http://wx.fuyulove.com/Recall/index.html")
+                }, 500)
+            }
+            layer.msg(res.msg);
+        });
+    }
+
+    // 设置线上留言
+    function upset(carid, item, value) {
+        var data = {
+            carid: carid,
+            item: item,
+            value: value,
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=upset", "post", data).then(function (res) {
+            console.log('设置', res);
+            if (res.code == 0) {
+                layer.msg("设置成功");
+
+            }
+        });
+    }
+
+    // 设置信息
+    function upsetDetail(carid) {
+        var data = {
+            carid: carid,
+        }
+        console.log("data", data)
+        httpRequest("/Action/recallapi?action=info", "get", data).then(function (res) {
+            console.log('设置详情', res);
+            if (res.code == 0) {
+                var info = res.data.info
+                console.log('info', info)
+                // 是否开启留言
+                var ismsg = info.ismsg
+                if (ismsg == 0) {
+                    $('.ismsg').attr('src', 'img/open.png')
+                } else {
+                    $('.ismsg').attr('src', 'img/close.png')
+                }
+                // 模板名称
+                var tempname = info.tempname
+                $('.tempname').text(tempname)
+                // 商家id
+               shopid = res.data.info.shopid
+
+            }
+        });
+    }
+</script>
+
+</html>

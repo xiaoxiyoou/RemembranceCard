@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <script src="js/rem.js"></script>
+    <link rel="stylesheet" href="css/diary.css" />
+    <link rel="stylesheet" href="css/reset.css" />
+    <link rel="stylesheet" href="js/need/layer.css" />
+    <title>追思卡</title>
+</head>
+
+<body>
+</body>
+<script src="js/jquery-1.8.2.js"></script>
+<script src="js/noScaling.js"></script>
+<script src="js/layer.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script src="js/shareComment.js"></script>
+<script src="js/http.js"></script>
+<script src="js/jquery.cookie.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script>
+    $(function () {
+        var userid = localStorage.getItem("userid");
+        // var useridcook = $.cookie('userid');
+        // console.log(useridcook)
+        if (!userid) {
+            GetCode()
+        }else{
+            location.href = 'http://wx.fuyulove.com/Recall/index.html'
+        }
+    })
+
+    function getUserData(code) {
+        $.ajax({
+            url: "http://wx.fuyulove.com/Action/userlogin?code=" + code,
+            dataType: "json",
+            success: function (res) {
+if(res.code==0){
+                console.log("登陆信息请求", res)
+
+                var data = res.data.userinfo
+                var userid = res.data.userid
+                var openid = res.data.openid
+
+                localStorage.setItem("NickName", data.nickname);
+                localStorage.setItem("HeadImg", data.headimgurl);
+                localStorage.setItem("userid", userid);
+                localStorage.setItem("openid", openid);
+                $.cookie('userid', userid, {
+                    path: '/'
+                })
+                var back = localStorage.getItem('path')
+                if (back) {
+                    location.href = back
+                } else {
+                    //location.href = 'http://wx.fuyulove.com/Recall/index.html'
+                }
+}
+else
+{
+alert(res.msg);
+}
+
+            },
+            error:function(){
+                location.href = 'http://wx.fuyulove.com/Recall/index.html'
+            }
+        });
+    }
+
+
+
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+
+    function GetCode() {
+        var code = getUrlParam("code");
+        if (code == '' || code == undefined) {
+            let appid = "wx3a1c77d8059257bf";
+            let redirect_url = window.location.href
+            let url = 'http://wxapi.fuyulove.com/sns/getcode.aspx?keys=fyloveobit&redirect_uri=' + redirect_url;
+            window.location.href = url
+
+
+        } else {
+            getUserData(code);
+
+        }
+
+    }
+</script>
+
+
+</html>
